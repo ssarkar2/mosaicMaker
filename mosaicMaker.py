@@ -1,6 +1,5 @@
 import wx
 import scipy.misc as im
-import matplotlib.pyplot as plt
 import numpy as np
 from os import listdir
 import random
