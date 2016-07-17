@@ -145,7 +145,7 @@ class displayMosaic(wx.Frame):
             mosaicColSpan = self.tw/float(self.mosaicCol)
             r = int(y/mosaicRowSpan)
             c = int(x/mosaicColSpan)
-            self.seenImages[self.imagesNames[r*self.mosaicCol + c]] = self.seenImages.get(self.imagesNames[r][c],0)+1
+            self.seenImages[self.imagesNames[r*self.mosaicCol + c]] = self.seenImages.get(self.imagesNames[r*self.mosaicCol + c],0)+1
 
             imgFrame = displayImage(None, wx.ID_ANY, self.allPicFolder, self.origImages[r*self.mosaicCol + c], self.labelsToDisplay[r][c])
             #print self.origImages[:self.mosaicCol]
