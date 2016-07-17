@@ -28,6 +28,7 @@ class mosaicSeq():
         self.finalList = repeat*self.availablePxlPics + self.availablePxlPics[:randomPick]
         random.shuffle(self.finalList)
         self.allImgData = {picName:im.imresize(im.imread(self.allPicFolder + picName), (self.imgRow,self.imgCol))/255.0 for picName in self.availablePxlPics[:(randomPick,None)[repeat>0]]}
+        self.numUniqueImgs = len(self.allImgData)
         self.mosaicSeqImageLoc = []
 
     def getMosiacLabel(self):
@@ -96,6 +97,9 @@ class displayMosaic(wx.Frame):
         start = time.time()
         m = mosaicSeq(allPicFolder, labelFile, mosaicRow, mosaicCol, imgRow, imgCol, steps, perc)
         m.generateNewMosiacSeq(basepicLoc, dumpLoc)
+        self.numUniqueImgs = m.numUniqueImgs
+        self.imagesNames = m.finalList
+        self.seenImages = {}
         print 'preprocessing time:', time.time()-start
         self.imagesToDisplay = m.mosaicSeqImageLoc
         self.labelsToDisplay = m.mosiacLabel
@@ -141,10 +145,12 @@ class displayMosaic(wx.Frame):
             mosaicColSpan = self.tw/float(self.mosaicCol)
             r = int(y/mosaicRowSpan)
             c = int(x/mosaicColSpan)
+            self.seenImages[self.imagesNames[r*self.mosaicCol + c]] = self.seenImages.get(self.imagesNames[r][c],0)+1
 
             imgFrame = displayImage(None, wx.ID_ANY, self.allPicFolder, self.origImages[r*self.mosaicCol + c], self.labelsToDisplay[r][c])
             #print self.origImages[:self.mosaicCol]
             imgFrame.Show(True)
+            self.SetTitle('Mosaic:' + str(len(self.seenImages)) + '/' + str(self.numUniqueImgs))
 
 
 
